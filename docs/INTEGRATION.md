@@ -52,7 +52,19 @@ Server responds (plaintext before encryption):
 }
 ```
 
-Wire format: `Fernet.encrypt(utf8_json)` → send as WebSocket text (base64) or binary per core implementation.
+## Commands (v1)
+
+| Command | Payload | Notes |
+|---------|---------|--------|
+| `ping` | — | Health check |
+| `get_state` | — | Observer flag, active exe, current sliders |
+| `set_sliders` | vibrance, brightness, contrast, gamma, hue; optional `exe` | Applies immediately; saves profile when exe is known |
+| `set_observer` | `enabled` (bool) | Toggles engine |
+| `reset_profile` | optional `exe` | Resets profile to GPU defaults at PC startup; uses active exe if omitted |
+
+## Wire format
+
+UTF-8 JSON envelope, encrypted with Fernet (key from QR), sent as a **base64url** WebSocket text frame.
 
 ## Settings keys (global)
 
