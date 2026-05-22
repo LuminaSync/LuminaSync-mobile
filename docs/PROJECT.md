@@ -1,15 +1,15 @@
 # Project overview
 
-Cross-platform remote control app (Android + iOS) for [LuminaSync Core](https://github.com/LuminaSync/LuminaSync-core). Lets users adjust display color settings from the phone without Alt+Tab during games.
+Cross-platform remote control app (Android + iOS) for [VibranceFlow Core](https://github.com/VibranceFlow/VibranceFlow-core). Lets users adjust display color settings from the phone without Alt+Tab during games.
 
 ## Ecosystem
 
 | Repository | Role | License |
 |------------|------|---------|
-| [LuminaSync-core](https://github.com/LuminaSync/LuminaSync-core) | Windows engine + GUI | GPL-3.0 |
-| [LuminaSync-mobile](https://github.com/LuminaSync/LuminaSync-mobile) | This repo | GPL-3.0 |
-| [LuminaSync-PoC](https://github.com/LuminaSync/LuminaSync-PoC) | Archived validation | — |
-| [LuminaSync-web](https://github.com/LuminaSync/LuminaSync-web) | Landing site (Vercel) | MIT |
+| [VibranceFlow-core](https://github.com/VibranceFlow/VibranceFlow-core) | Windows engine + GUI | GPL-3.0 |
+| [VibranceFlow-mobile](https://github.com/VibranceFlow/VibranceFlow-mobile) | This repo | GPL-3.0 |
+| [VibranceFlow-PoC](https://github.com/VibranceFlow/VibranceFlow-PoC) | Archived validation | — |
+| [VibranceFlow-web](https://github.com/VibranceFlow/VibranceFlow-web) | Landing site (Vercel) | MIT |
 
 ## Communication model (planned)
 

@@ -1,8 +1,8 @@
-# LuminaSync Mobile
+# VibranceFlow Mobile
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 
-Android and iOS remote for [LuminaSync Core](https://github.com/LuminaSync/LuminaSync-core). Adjust vibrance, brightness, contrast, gamma, and hue over **encrypted LAN WebSocket** — no cloud, no account.
+Android and iOS remote for [VibranceFlow Core](https://github.com/VibranceFlow/VibranceFlow-core). Adjust vibrance, brightness, contrast, gamma, and hue over **encrypted LAN WebSocket** — no cloud, no account.
 
 ## Security
 
@@ -16,13 +16,13 @@ See [docs/SECURITY.md](docs/SECURITY.md).
 - Node.js **LTS** (20+)
 - [Expo Go](https://expo.dev/go) **SDK 54** on your phone (must match project — see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md))
 - **Expo SDK 54** in this repo (React Native 0.81, React 19.1)
-- Windows PC running LuminaSync Core on the **same Wi‑Fi**
+- Windows PC running VibranceFlow Core on the **same Wi‑Fi**
 - Camera permission **only** when scanning the PC QR code
 
 ## Setup (first time)
 
 ```powershell
-cd LuminaSync-mobile
+cd VibranceFlow-mobile
 npm install
 npm run fix-deps
 npm run audit:check
@@ -50,7 +50,7 @@ Prefer LAN mode (`start:lan`) so the phone reaches your PC on the local network.
 On the PC, copy pairing JSON from **Pair Mobile**, then:
 
 ```powershell
-cd ..\LuminaSync-core
+cd ..\VibranceFlow-core
 # Pair Mobile → Copy JSON → save as scripts\pairing.json (see scripts\pairing.json.example)
 poetry run python scripts/ws_remote_client.py --pairing scripts\pairing.json --demo
 ```

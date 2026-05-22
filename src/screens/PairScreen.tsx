@@ -294,7 +294,7 @@ export function PairScreen({ onPaired }: Props) {
 
       <Text style={styles.sub}>
 
-        On Windows open LuminaSync → Pair Mobile. Enter the same IP and 6-digit code on your phone.
+        On Windows open VibranceFlow → Pair Mobile. Enter the same IP and 6-digit code on your phone.
 
       </Text>
 

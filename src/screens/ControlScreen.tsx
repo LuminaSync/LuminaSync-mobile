@@ -330,7 +330,7 @@ export function ControlScreen({ pairing, onForget: onForgetCallback, onRepair }:
           </ScrollView>
         </View>
       ) : (
-        <Text style={styles.mutedSmall}>No saved programs on PC yet — add one in LuminaSync.</Text>
+        <Text style={styles.mutedSmall}>No saved programs on PC yet — add one in VibranceFlow.</Text>
       )}
 
       <View style={styles.rowSwitch}>

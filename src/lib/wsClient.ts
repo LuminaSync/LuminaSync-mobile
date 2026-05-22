@@ -67,7 +67,7 @@ export class LuminaWsClient {
       const timeout = setTimeout(
         () =>
           fail(
-            "Connection timed out. Keep LuminaSync open on the PC and allow it in Windows Firewall.",
+            "Connection timed out. Keep VibranceFlow open on the PC and allow it in Windows Firewall.",
           ),
         15_000,
       );
@@ -79,7 +79,7 @@ export class LuminaWsClient {
         resolve();
       };
       ws.onerror = () => {
-        fail("WebSocket error. Is LuminaSync running on the PC?");
+        fail("WebSocket error. Is VibranceFlow running on the PC?");
       };
       ws.onclose = () => {
         if (!settled) {

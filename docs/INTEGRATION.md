@@ -1,6 +1,6 @@
-# Integration with LuminaSync Core
+# Integration with VibranceFlow Core
 
-This document is the contract between **LuminaSync-mobile** and **LuminaSync-core**. Keep both sides in sync when the protocol changes.
+This document is the contract between **VibranceFlow-mobile** and **VibranceFlow-core**. Keep both sides in sync when the protocol changes.
 
 ## Profile units (must match core)
 
@@ -58,7 +58,7 @@ Server responds (plaintext before encryption):
 }
 ```
 
-`programs` mirrors saved entries in `%APPDATA%\\LuminaSync\\profiles.json`. Both UIs poll `get_state` (~1.5s) so local edits on PC or phone appear on the other side without reloading the app.
+`programs` mirrors saved entries in `%APPDATA%\\VibranceFlow\\profiles.json`. Both UIs poll `get_state` (~1.5s) so local edits on PC or phone appear on the other side without reloading the app.
 
 When the PC closes the remote port, the server sends an encrypted frame `{"event":"port_closed","error":"port_closed"}` before disconnecting. The mobile app shows a waiting state and auto-reconnects when the port is opened again (same saved pairing key).
 
@@ -124,12 +124,12 @@ Mobile may expose observer toggle and "desktop colors" separately from per-game 
 
 | Concern | Owner repo |
 |---------|------------|
-| NVAPI / GDI | LuminaSync-core |
-| WebSocket server + QR | LuminaSync-core |
-| UI sliders + QR scan | LuminaSync-mobile |
-| Public downloads / SEO | LuminaSync-web |
+| NVAPI / GDI | VibranceFlow-core |
+| WebSocket server + QR | VibranceFlow-core |
+| UI sliders + QR scan | VibranceFlow-mobile |
+| Public downloads / SEO | VibranceFlow-web |
 
 ## References
 
-- Core example config: `profiles.json.example` on [LuminaSync-core](https://github.com/LuminaSync/LuminaSync-core)
-- PoC validation (archived): [LuminaSync-PoC](https://github.com/LuminaSync/LuminaSync-PoC)
+- Core example config: `profiles.json.example` on [VibranceFlow-core](https://github.com/VibranceFlow/VibranceFlow-core)
+- PoC validation (archived): [VibranceFlow-PoC](https://github.com/VibranceFlow/VibranceFlow-PoC)

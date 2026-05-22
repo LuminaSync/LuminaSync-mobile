@@ -7,8 +7,8 @@ export function redactHostPort(host: string, port: number): string {
 export function devLog(message: string, extra?: Record<string, unknown>): void {
   if (!__DEV__) return;
   if (extra) {
-    console.log(`[LuminaSync] ${message}`, extra);
+    console.log(`[VibranceFlow] ${message}`, extra);
   } else {
-    console.log(`[LuminaSync] ${message}`);
+    console.log(`[VibranceFlow] ${message}`);
   }
 }

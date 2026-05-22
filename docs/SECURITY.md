@@ -1,6 +1,6 @@
-# Security — LuminaSync Mobile
+# Security — VibranceFlow Mobile
 
-LuminaSync Mobile is a **local remote control** for your own PC. It does not use accounts, cloud backends, or analytics.
+VibranceFlow Mobile is a **local remote control** for your own PC. It does not use accounts, cloud backends, or analytics.
 
 ## Threat model (v1)
 
@@ -10,7 +10,7 @@ LuminaSync Mobile is a **local remote control** for your own PC. It does not use
 | Stolen phone backup exposes pairing | Fernet `key` stored in **expo-secure-store** only (not AsyncStorage) |
 | Malicious QR points phone at a public IP | App refuses WebSocket hosts outside **private / link-local** IPv4 ranges |
 | Accidental secret leakage via logs | Production code must not log `key` or decrypted payloads |
-| Data sent to LuminaSync servers | **None** — no internet API calls in the app runtime (LAN only) |
+| Data sent to VibranceFlow servers | **None** — no internet API calls in the app runtime (LAN only) |
 
 This is **local zero-trust**: the LAN is untrusted; only holders of the pairing key can issue valid commands.
 
@@ -48,11 +48,11 @@ No microphone, Bluetooth, or location.
 ## Dependencies and `npm audit`
 
 - **Runtime app** (Expo Go / device): only LAN WebSocket + Fernet + SecureStore + camera on Pair screen. No third-party analytics or cloud SDKs.
-- **Dev tooling** (`expo`, Metro, CLI): used on your PC to bundle the app; not shipped as part of the LuminaSync control logic.
+- **Dev tooling** (`expo`, Metro, CLI): used on your PC to bundle the app; not shipped as part of the VibranceFlow control logic.
 - Patched transitive packages are pinned via `overrides` in `package.json` (`@xmldom/xmldom`, `postcss`, `tar`, `uuid`).
 - After `npm install`, run `npm run audit:check` — expect **0 high** findings.
 - Do **not** run `npm audit fix --force` (it would jump to an unrelated Expo major and break the project).
 
 ## Reporting issues
 
-Open a GitHub issue on [LuminaSync-mobile](https://github.com/LuminaSync/LuminaSync-mobile) with steps to reproduce. Do not paste real pairing `key` values in public issues.
+Open a GitHub issue on [VibranceFlow-mobile](https://github.com/VibranceFlow/VibranceFlow-mobile) with steps to reproduce. Do not paste real pairing `key` values in public issues.

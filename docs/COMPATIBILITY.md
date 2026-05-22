@@ -34,7 +34,7 @@ Not possible in a **single** repo branch at the same time. Options:
 | Git branch `sdk-52` | Legacy testing only; install old Expo Go APK from Expo archives |
 | **Development build** | Custom native app; not tied to store Expo Go version |
 
-## LuminaSync protocol
+## VibranceFlow protocol
 
 Pairing and WebSocket protocol (`v: 1`) are independent of Expo SDK. Upgrading Expo does not change LAN security or core compatibility.
 
@@ -43,6 +43,6 @@ Pairing and WebSocket protocol (`v: 1`) are independent of Expo SDK. Upgrading E
 | Mode | Who uses it |
 |------|-------------|
 | **Expo Go** + `npm run start:lan` | You, while developing on a real phone |
-| **APK / IPA** (EAS Build or local) | End users install **LuminaSync** — they do **not** need Expo Go |
+| **APK / IPA** (EAS Build or local) | End users install **VibranceFlow** — they do **not** need Expo Go |
 
 Expo Go only loads your JavaScript bundle from the PC during development. A store or sideloaded build embeds the app and does not depend on Metro or the terminal QR.

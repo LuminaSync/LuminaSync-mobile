@@ -2,7 +2,7 @@
 
 ## Problem
 
-Display tuning tools often require Alt+Tab during competitive play. LuminaSync Mobile is a **local remote control**: adjust vibrance, brightness, contrast, gamma, and hue from the phone while the game stays fullscreen on Windows.
+Display tuning tools often require Alt+Tab during competitive play. VibranceFlow Mobile is a **local remote control**: adjust vibrance, brightness, contrast, gamma, and hue from the phone while the game stays fullscreen on Windows.
 
 ## Why LAN WebSockets (not Bluetooth)
 
@@ -64,7 +64,7 @@ Full mobile policy: [SECURITY.md](SECURITY.md).
 
 ```
 ┌─────────────┐   QR (once)    ┌─────────────┐
-│ LuminaSync  │ ◄───────────── │ Mobile app  │
+│ VibranceFlow  │ ◄───────────── │ Mobile app  │
 │ Core (PC)   │                │ Android/iOS │
 └──────┬──────┘                └──────┬──────┘
        │  ws://host:port              │
@@ -86,7 +86,7 @@ Full mobile policy: [SECURITY.md](SECURITY.md).
 
 Exact JSON schema: `docs/INTEGRATION.md` (field `v`).
 
-## Desktop side (implemented in LuminaSync-core, not this repo)
+## Desktop side (implemented in VibranceFlow-core, not this repo)
 
 - Thread/async WebSocket server (e.g. `websockets` library).
 - `qrcode` for on-screen pairing.

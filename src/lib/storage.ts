@@ -3,10 +3,10 @@ import * as SecureStore from "expo-secure-store";
 import type { PairingPayload } from "../types/protocol";
 import { PROTOCOL_VERSION } from "../types/protocol";
 
-const KEY_HOST = "luminasync.host";
-const KEY_PORT = "luminasync.port";
-const KEY_FERNET = "luminasync.key";
-const KEY_VERSION = "luminasync.v";
+const KEY_HOST = "VibranceFlow.host";
+const KEY_PORT = "VibranceFlow.port";
+const KEY_FERNET = "VibranceFlow.key";
+const KEY_VERSION = "VibranceFlow.v";
 
 export type StoredPairing = {
   host: string;

@@ -1,6 +1,6 @@
 export const PROTOCOL_VERSION = 1;
 
-/** Must match LuminaSync-core DEFAULT_PORT. */
+/** Must match VibranceFlow-core DEFAULT_PORT. */
 export const DEFAULT_REMOTE_PORT = 8765;
 
 export type RemoteCommand =

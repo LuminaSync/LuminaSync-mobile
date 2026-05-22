@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "LuminaSync",
-    "slug": "luminasync-mobile",
+    "name": "VibranceFlow",
+    "slug": "VibranceFlow-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
@@ -11,14 +11,14 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.luminasync.mobile",
+      "bundleIdentifier": "com.VibranceFlow.mobile",
       "infoPlist": {
         "NSCameraUsageDescription": "Camera is used only to scan the pairing QR code from your PC.",
-        "NSLocalNetworkUsageDescription": "LuminaSync connects to your PC on the local network to adjust display settings. No internet servers are used."
+        "NSLocalNetworkUsageDescription": "VibranceFlow connects to your PC on the local network to adjust display settings. No internet servers are used."
       }
     },
     "android": {
-      "package": "com.luminasync.mobile",
+      "package": "com.VibranceFlow.mobile",
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "backgroundColor": "#0d1117"
@@ -29,7 +29,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow LuminaSync to scan the pairing QR code on your PC screen."
+          "cameraPermission": "Allow VibranceFlow to scan the pairing QR code on your PC screen."
         }
       ],
       "expo-secure-store"

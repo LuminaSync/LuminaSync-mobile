@@ -1,17 +1,17 @@
-# Contributing to LuminaSync Mobile
+# Contributing to VibranceFlow Mobile
 
-Thank you for helping build the mobile remote for LuminaSync.
+Thank you for helping build the mobile remote for VibranceFlow.
 
 ## Prerequisites
 
 - Node.js LTS (when the app scaffold exists)
 - Expo CLI or `npx expo` per project README
-- A Windows PC running [LuminaSync-core](https://github.com/LuminaSync/LuminaSync-core) on the same LAN for integration tests
+- A Windows PC running [VibranceFlow-core](https://github.com/VibranceFlow/VibranceFlow-core) on the same LAN for integration tests
 
 ## Setup
 
 ```powershell
-cd LuminaSync-mobile
+cd VibranceFlow-mobile
 npm install
 npm run start:lan
 ```
