@@ -10,7 +10,15 @@ Thank you for helping build the mobile remote for LuminaSync.
 
 ## Setup
 
-Instructions will be added when the initial Expo project is committed. Until then, read `docs/ARCHITECTURE.md` for the planned layout.
+```powershell
+cd LuminaSync-mobile
+npm install
+npm run start:lan
+```
+
+Install **Expo Go** on your device. Keep the phone and Windows PC on the same LAN. For protocol details see `docs/INTEGRATION.md` and `docs/SECURITY.md`.
+
+**Security rules:** no cloud/analytics SDKs; pairing secrets only in `expo-secure-store`; validate LAN hosts with `src/lib/netPolicy.ts`; never log Fernet keys.
 
 ## Commit message format
 

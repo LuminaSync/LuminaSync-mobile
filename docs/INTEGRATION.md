@@ -47,17 +47,27 @@ Server responds (plaintext before encryption):
       "contrast": 5,
       "gamma": 1.05,
       "hue": 0
-    }
+    },
+    "programs": [
+      {
+        "exe": "game.exe",
+        "sliders": { "vibrance": 80, "brightness": 10, "contrast": 5, "gamma": 1.05, "hue": 0 }
+      }
+    ]
   }
 }
 ```
+
+`programs` mirrors saved entries in `%APPDATA%\\LuminaSync\\profiles.json`. Both UIs poll `get_state` (~1.5s) so local edits on PC or phone appear on the other side without reloading the app.
+
+When the PC closes the remote port, the server sends an encrypted frame `{"event":"port_closed","error":"port_closed"}` before disconnecting. The mobile app shows a waiting state and auto-reconnects when the port is opened again (same saved pairing key).
 
 ## Commands (v1)
 
 | Command | Payload | Notes |
 |---------|---------|--------|
 | `ping` | — | Health check |
-| `get_state` | — | Observer flag, active exe, current sliders |
+| `get_state` | — | Observer, active exe, current sliders, `programs[]` |
 | `set_sliders` | vibrance, brightness, contrast, gamma, hue; optional `exe` | Applies immediately; saves profile when exe is known |
 | `set_observer` | `enabled` (bool) | Toggles engine |
 | `reset_profile` | optional `exe` | Resets profile to GPU defaults at PC startup; uses active exe if omitted |
@@ -66,11 +76,41 @@ Server responds (plaintext before encryption):
 
 UTF-8 JSON envelope, encrypted with Fernet (key from QR), sent as a **base64url** WebSocket text frame.
 
+Mobile implements the same double-encoding as Python in `src/lib/fernetWire.ts`. The **inner** Fernet token base64 must keep `=` padding; the outer layer may omit padding (core `_b64url_decode` adds it back).
+
+## Pairing (primary: IP + 6-digit code)
+
+1. PC: **Pair Mobile** shows LAN **IP**, **6-digit code**, port `8765`.
+2. Phone: enter IP + code → plaintext WebSocket frame (LAN only):
+
+```json
+{"v":1,"cmd":"pair","pin":"482917"}
+```
+
+3. PC responds once (plaintext):
+
+```json
+{"v":1,"ok":true,"host":"192.168.1.42","port":8765,"key":"<url-safe-fernet-key>"}
+```
+
+4. All later frames use Fernet (double base64url) as below.
+
+Code expires in ~15 minutes; **New code** on PC invalidates the previous one. QR / JSON remain optional.
+
+## Pairing payload (QR / advanced)
+
+```json
+{"v":1,"host":"192.168.1.42","port":8765,"key":"<url-safe-fernet-key>"}
+```
+
+Mobile validates `host` is a private LAN IPv4 address before connecting.
+
 ## Settings keys (global)
 
 From `AppSettings` / `profiles.json` `settings` section:
 
 - `observer_enabled` (bool)
+- `keep_remote_port_open` (bool) — when true, TCP 8765 stays up after closing Pair Mobile
 - `desktop_vibrance`, `desktop_brightness`, `desktop_contrast`, `desktop_gamma`, `desktop_hue`
 
 Mobile may expose observer toggle and "desktop colors" separately from per-game profiles.

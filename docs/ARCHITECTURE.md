@@ -36,12 +36,29 @@ Public CA TLS on raw LAN IPs is awkward (certificate warnings). v1 uses **payloa
 
 Threat model: neighbors on the same Wi‑Fi cannot forge or read commands without the pairing secret. This is **not** a substitute for internet-facing TLS if a future cloud relay is added.
 
-### Hardening checklist (implementation time)
+Full mobile policy: [SECURITY.md](SECURITY.md).
+
+### Mobile app (implemented constraints)
+
+- Pairing secret in **expo-secure-store** only; **Forget pairing** wipes storage.
+- WebSocket host must be **private / link-local IPv4** (app-side check).
+- No analytics, accounts, or internet backends in v1.
+- Camera used only on the Pair screen for QR.
+
+### Hardening checklist
+
+**Core (desktop)**
 
 - [ ] Bind WebSocket to LAN interface only (not `0.0.0.0` on public networks without firewall rules).
 - [ ] Optional: require user confirmation on PC when a new device pairs.
-- [ ] Session rotation: new QR invalidates old phone keys.
-- [ ] Rate limits and maximum message size on server.
+- [x] Session rotation: new QR invalidates old phone keys (regenerate in Pair Mobile).
+- [x] Rate limits and maximum message size on server.
+
+**Mobile**
+
+- [x] LAN host validation before connect
+- [x] Redacted logging (no secrets)
+- [ ] Optional: certificate / TLS if LAN transport hardening is added later
 
 ## Message flow
 
@@ -57,17 +74,17 @@ Threat model: neighbors on the same Wi‑Fi cannot forge or read commands withou
        └──────────────────────────────►
 ```
 
-## Planned commands (v1)
+## Commands (v1, implemented)
 
 | Command | Purpose |
 |---------|---------|
-| `get_state` | Current profile + observer flag |
-| `set_sliders` | Partial update: vibrance, brightness, contrast, gamma, hue |
+| `get_state` | Observer, active exe, sliders, saved `programs[]` |
+| `set_sliders` | Update sliders; optional `exe` for a saved profile |
 | `set_observer` | Enable/disable foreground observer |
-| `apply_desktop` | Apply desktop baseline profile |
-| `ping` | Keepalive |
+| `reset_profile` | Reset active (or given) exe to GPU defaults |
+| `ping` | Health check |
 
-Exact JSON schema lives in `docs/INTEGRATION.md` (versioned field `v`).
+Exact JSON schema: `docs/INTEGRATION.md` (field `v`).
 
 ## Desktop side (implemented in LuminaSync-core, not this repo)
 
@@ -78,9 +95,11 @@ Exact JSON schema lives in `docs/INTEGRATION.md` (versioned field `v`).
 
 ## Mobile side (this repo)
 
-- **Expo / React Native** recommended for one TypeScript codebase.
-- Screens: Home (connection), Pair (QR), Control (sliders), Settings (forget pairing).
-- Reconnect with backoff when PC IP changes (show "repair" if QR needed).
+- **Expo SDK 54** / React Native + TypeScript at repo root.
+- Screens: **Pair** (IP + 6-digit PIN, QR scan), **Control** (sliders, program chips, observer, reset).
+- `SliderRow`: native slider + tap value for numeric keyboard entry.
+- Poll `get_state` ~1.5 s; on `port_closed`, show waiting UI and auto-reconnect when PC reopens port.
+- Pairing secret in SecureStore; **Forget pairing** wipes storage.
 
 ## Alternatives considered
 

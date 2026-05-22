@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "LuminaSync",
+    "slug": "luminasync-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0d1117"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.luminasync.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Camera is used only to scan the pairing QR code from your PC.",
+        "NSLocalNetworkUsageDescription": "LuminaSync connects to your PC on the local network to adjust display settings. No internet servers are used."
+      }
+    },
+    "android": {
+      "package": "com.luminasync.mobile",
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "backgroundColor": "#0d1117"
+      },
+      "permissions": ["CAMERA"]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow LuminaSync to scan the pairing QR code on your PC screen."
+        }
+      ],
+      "expo-secure-store"
+    ]
+  }
+}
