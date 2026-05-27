@@ -4,8 +4,8 @@
 
 **Expo Go only supports one SDK version** — the latest release on the Play Store / App Store.
 
-| Your Expo Go | Project must use |
-|--------------|------------------|
+| Your Expo Go                 | Project must use                  |
+| ---------------------------- | --------------------------------- |
 | SDK 54 (current store build) | Expo SDK **54** in `package.json` |
 
 You cannot open an SDK 52 project in Expo Go SDK 54 (or the reverse). This project targets **SDK 54** to match current Expo Go.
@@ -28,11 +28,11 @@ Expo Go is for development only. For users on **older Android / iOS** devices:
 
 Not possible in a **single** repo branch at the same time. Options:
 
-| Approach | Use when |
-|----------|----------|
-| **One SDK (54)** — this repo | Normal development with latest Expo Go |
-| Git branch `sdk-52` | Legacy testing only; install old Expo Go APK from Expo archives |
-| **Development build** | Custom native app; not tied to store Expo Go version |
+| Approach                     | Use when                                                        |
+| ---------------------------- | --------------------------------------------------------------- |
+| **One SDK (54)** — this repo | Normal development with latest Expo Go                          |
+| Git branch `sdk-52`          | Legacy testing only; install old Expo Go APK from Expo archives |
+| **Development build**        | Custom native app; not tied to store Expo Go version            |
 
 ## VibranceFlow protocol
 
@@ -40,9 +40,9 @@ Pairing and WebSocket protocol (`v: 1`) are independent of Expo SDK. Upgrading E
 
 ## Expo Go vs production app
 
-| Mode | Who uses it |
-|------|-------------|
-| **Expo Go** + `npm run start:lan` | You, while developing on a real phone |
+| Mode                               | Who uses it                                                       |
+| ---------------------------------- | ----------------------------------------------------------------- |
+| **Expo Go** + `npm run start:lan`  | You, while developing on a real phone                             |
 | **APK / IPA** (EAS Build or local) | End users install **VibranceFlow** — they do **not** need Expo Go |
 
 Expo Go only loads your JavaScript bundle from the PC during development. A store or sideloaded build embeds the app and does not depend on Metro or the terminal QR.

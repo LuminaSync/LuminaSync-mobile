@@ -3,6 +3,7 @@
     "name": "VibranceFlow",
     "slug": "VibranceFlow-mobile",
     "version": "1.0.0",
+    "icon": "./src/screens/ios_logo.png",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "splash": {
@@ -21,6 +22,7 @@
       "package": "com.VibranceFlow.mobile",
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
+        "foregroundImage": "./src/screens/android_logo.png",
         "backgroundColor": "#0d1117"
       },
       "permissions": ["CAMERA"]

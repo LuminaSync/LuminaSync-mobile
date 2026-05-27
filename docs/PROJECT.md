@@ -4,12 +4,12 @@ Cross-platform remote control app (Android + iOS) for [VibranceFlow Core](https:
 
 ## Ecosystem
 
-| Repository | Role | License |
-|------------|------|---------|
-| [VibranceFlow-core](https://github.com/VibranceFlow/VibranceFlow-core) | Windows engine + GUI | GPL-3.0 |
-| [VibranceFlow-mobile](https://github.com/VibranceFlow/VibranceFlow-mobile) | This repo | GPL-3.0 |
-| [VibranceFlow-PoC](https://github.com/VibranceFlow/VibranceFlow-PoC) | Archived validation | — |
-| [VibranceFlow-web](https://github.com/VibranceFlow/VibranceFlow-web) | Landing site (Vercel) | MIT |
+| Repository                                                                 | Role                  | License |
+| -------------------------------------------------------------------------- | --------------------- | ------- |
+| [VibranceFlow-core](https://github.com/VibranceFlow/VibranceFlow-core)     | Windows engine + GUI  | GPL-3.0 |
+| [VibranceFlow-mobile](https://github.com/VibranceFlow/VibranceFlow-mobile) | This repo             | GPL-3.0 |
+| [VibranceFlow-PoC](https://github.com/VibranceFlow/VibranceFlow-PoC)       | Archived validation   | —       |
+| [VibranceFlow-web](https://github.com/VibranceFlow/VibranceFlow-web)       | Landing site (Vercel) | MIT     |
 
 ## Communication model (planned)
 

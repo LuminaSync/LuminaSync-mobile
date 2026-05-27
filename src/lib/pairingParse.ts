@@ -31,7 +31,10 @@ export function parsePairingJson(
   }
   const o = parsed as Record<string, unknown>;
   if (o.v !== PROTOCOL_VERSION) {
-    return { ok: false, error: `Unsupported protocol version (expected ${PROTOCOL_VERSION}).` };
+    return {
+      ok: false,
+      error: `Unsupported protocol version (expected ${PROTOCOL_VERSION}).`,
+    };
   }
   if (typeof o.host !== "string") return { ok: false, error: "Missing host." };
   const host = normalizeLanHost(o.host);

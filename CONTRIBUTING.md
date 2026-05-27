@@ -34,15 +34,15 @@ Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
 
 ### Types
 
-| Type | Use for |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no logic change |
+| Type       | Use for                         |
+| ---------- | ------------------------------- |
+| `feat`     | New feature                     |
+| `fix`      | Bug fix                         |
+| `docs`     | Documentation only              |
+| `style`    | Formatting, no logic change     |
 | `refactor` | Code change without feature/fix |
-| `test` | Tests |
-| `chore` | Tooling, deps, CI |
+| `test`     | Tests                           |
+| `chore`    | Tooling, deps, CI               |
 
 ### Examples
 

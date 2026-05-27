@@ -1,5 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  PanResponder,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import Slider from "@react-native-community/slider";
 
 import { colors } from "../theme";
@@ -12,21 +19,42 @@ type Props = {
   step?: number;
   format?: (v: number) => string;
   onChange: (v: number) => void;
+  onSlidingStart?: () => void;
+  onSlidingComplete?: () => void;
 };
 
-function snapToStep(value: number, min: number, max: number, step: number): number {
+function snapToStep(
+  value: number,
+  min: number,
+  max: number,
+  step: number,
+): number {
   const clamped = Math.min(max, Math.max(min, value));
   if (step <= 0) return clamped;
   const snapped = Math.round(clamped / step) * step;
-  const decimals = step < 1 ? String(step).split(".")[1]?.length ?? 2 : 0;
+  const decimals = step < 1 ? (String(step).split(".")[1]?.length ?? 2) : 0;
   return Number(snapped.toFixed(decimals));
 }
 
-export function SliderRow({ label, value, min, max, step = 1, format, onChange }: Props) {
+export function SliderRow({
+  label,
+  value,
+  min,
+  max,
+  step = 1,
+  format,
+  onChange,
+  onSlidingStart,
+  onSlidingComplete,
+}: Props) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
+  const trackRef = useRef<View>(null);
+  const [trackFrame, setTrackFrame] = useState({ x: 0, width: 1 });
 
-  const display = format ? format(value) : String(Math.round(value * 100) / 100);
+  const display = format
+    ? format(value)
+    : String(Math.round(value * 100) / 100);
   const decimals = step < 1 ? 2 : 0;
 
   useEffect(() => {
@@ -47,6 +75,54 @@ export function SliderRow({ label, value, min, max, step = 1, format, onChange }
   const onSlide = (v: number) => {
     onChange(snapToStep(v, min, max, step));
   };
+
+  const measureTrack = useCallback(() => {
+    trackRef.current?.measureInWindow((x, _y, width) => {
+      setTrackFrame({ x, width: Math.max(width, 1) });
+    });
+  }, []);
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => false,
+        onStartShouldSetPanResponderCapture: () => false,
+        onMoveShouldSetPanResponder: (_event, gestureState) =>
+          Math.abs(gestureState.dx) > 6 &&
+          Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 1.2,
+        onMoveShouldSetPanResponderCapture: (_event, gestureState) =>
+          Math.abs(gestureState.dx) > 6 &&
+          Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 1.2,
+        onPanResponderGrant: (event, gestureState) => {
+          onSlidingStart?.();
+          const pageX =
+            gestureState.moveX ||
+            event.nativeEvent.pageX ||
+            event.nativeEvent.locationX ||
+            0;
+          onSlide(
+            min + ((pageX - trackFrame.x) / trackFrame.width) * (max - min),
+          );
+        },
+        onPanResponderMove: (event, gestureState) => {
+          const pageX =
+            gestureState.moveX ||
+            event.nativeEvent.pageX ||
+            event.nativeEvent.locationX ||
+            0;
+          onSlide(
+            min + ((pageX - trackFrame.x) / trackFrame.width) * (max - min),
+          );
+        },
+        onPanResponderRelease: () => {
+          onSlidingComplete?.();
+        },
+        onPanResponderTerminate: () => {
+          onSlidingComplete?.();
+        },
+      }),
+    [max, min, onSlidingComplete, onSlidingStart, trackFrame],
+  );
 
   return (
     <View style={styles.block}>
@@ -76,24 +152,35 @@ export function SliderRow({ label, value, min, max, step = 1, format, onChange }
           </Pressable>
         )}
       </View>
-      <Slider
-        style={styles.slider}
-        minimumValue={min}
-        maximumValue={max}
-        step={step}
-        value={value}
-        onValueChange={onSlide}
-        minimumTrackTintColor={colors.accent}
-        maximumTrackTintColor="#30363d"
-        thumbTintColor={colors.accent}
-      />
+      <View
+        ref={trackRef}
+        style={styles.sliderTouch}
+        onLayout={measureTrack}
+        {...panResponder.panHandlers}
+      >
+        <View pointerEvents="none">
+          <Slider
+            style={styles.slider}
+            minimumValue={min}
+            maximumValue={max}
+            step={step}
+            value={value}
+            onValueChange={onSlide}
+            onSlidingStart={onSlidingStart}
+            onSlidingComplete={onSlidingComplete}
+            minimumTrackTintColor={colors.accent}
+            maximumTrackTintColor="#30363d"
+            thumbTintColor={colors.accent}
+          />
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#30363d",
   },
@@ -101,19 +188,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 4,
+    marginBottom: 2,
   },
-  label: { color: colors.text, fontSize: 14, flex: 1 },
+  label: { color: colors.text, fontSize: 13, flex: 1 },
   value: {
     color: colors.accent,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     minWidth: 52,
     textAlign: "right",
   },
   valueInput: {
     color: colors.text,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     minWidth: 72,
     textAlign: "right",
@@ -124,5 +211,12 @@ const styles = StyleSheet.create({
     borderColor: colors.accent,
     backgroundColor: colors.card,
   },
-  slider: { width: "100%", height: 36 },
+  sliderTouch: {
+    width: "100%",
+    justifyContent: "center",
+    minHeight: 44,
+    marginHorizontal: -8,
+    paddingHorizontal: 8,
+  },
+  slider: { width: "100%", height: 38 },
 });

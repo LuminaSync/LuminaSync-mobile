@@ -1,7 +1,8 @@
 import { webcrypto } from "node:crypto";
 import { writeFileSync, readFileSync } from "node:fs";
 
-(globalThis as typeof globalThis & { crypto?: Crypto }).crypto ??= webcrypto as Crypto;
+(globalThis as typeof globalThis & { crypto?: Crypto }).crypto ??=
+  webcrypto as Crypto;
 import { encryptJson } from "../src/lib/fernetWire";
 
 const key = readFileSync(".test-key.txt", "utf8").trim();

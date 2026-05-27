@@ -1,5 +1,6 @@
 import { webcrypto } from "node:crypto";
-(globalThis as typeof globalThis & { crypto?: Crypto }).crypto ??= webcrypto as Crypto;
+(globalThis as typeof globalThis & { crypto?: Crypto }).crypto ??=
+  webcrypto as Crypto;
 import { encryptJson } from "../src/lib/fernetWire";
 
 const key = process.argv[2];

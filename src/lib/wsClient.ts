@@ -1,7 +1,11 @@
 import { encryptJson, decryptJson } from "./fernetWire";
 import { devLog, redactHostPort } from "./redact";
 import { isPrivateLanHost } from "./netPolicy";
-import type { RemoteCommand, RemoteRequest, RemoteResponse } from "../types/protocol";
+import type {
+  RemoteCommand,
+  RemoteRequest,
+  RemoteResponse,
+} from "../types/protocol";
 import { PROTOCOL_VERSION } from "../types/protocol";
 
 export type DisconnectReason = "port_closed" | "lost";
@@ -150,7 +154,10 @@ export class LuminaWsClient {
     }
   }
 
-  sendCommand(cmd: RemoteCommand, payload?: Record<string, unknown>): Promise<RemoteResponse> {
+  sendCommand(
+    cmd: RemoteCommand,
+    payload?: Record<string, unknown>,
+  ): Promise<RemoteResponse> {
     if (!this.connected || !this.ws) {
       return Promise.reject(new Error("Not connected. Re-pair with the PC."));
     }

@@ -18,7 +18,7 @@ function b64UrlEncode(bytes: Uint8Array): string {
 
 function b64UrlDecode(wire: string): Uint8Array {
   let b64 = wire.replace(/-/g, "+").replace(/_/g, "/");
-  const pad = (-b64.length) % 4;
+  const pad = -b64.length % 4;
   if (pad) b64 += "=".repeat(pad);
   return new Uint8Array(Buffer.from(b64, "base64"));
 }
@@ -42,7 +42,10 @@ function concat(parts: Uint8Array[]): Uint8Array {
   return out;
 }
 
-function decodeFernetKey(key: string): { signKey: Uint8Array; encKey: Uint8Array } {
+function decodeFernetKey(key: string): {
+  signKey: Uint8Array;
+  encKey: Uint8Array;
+} {
   const raw = b64UrlDecode(key);
   if (raw.length !== 32) {
     throw new Error("invalid Fernet key length");
@@ -57,7 +60,9 @@ function writeTimestamp(seconds: number): Uint8Array {
 }
 
 function readTimestamp(bytes: Uint8Array): number {
-  return Number(new DataView(bytes.buffer, bytes.byteOffset, 8).getBigUint64(0));
+  return Number(
+    new DataView(bytes.buffer, bytes.byteOffset, 8).getBigUint64(0),
+  );
 }
 
 function randomIv(): Uint8Array {
@@ -96,14 +101,22 @@ function hmacSha256(data: Uint8Array, signKey: Uint8Array): Uint8Array {
   return result;
 }
 
-function aesEncrypt(plaintext: string, encKey: Uint8Array, iv: Uint8Array): Uint8Array {
+function aesEncrypt(
+  plaintext: string,
+  encKey: Uint8Array,
+  iv: Uint8Array,
+): Uint8Array {
   const textBytes = aes.utils.utf8.toBytes(plaintext);
   const padded = pkcs7Pad(Array.from(textBytes));
   const cbc = new aes.ModeOfOperation.cbc(Array.from(encKey), Array.from(iv));
   return new Uint8Array(cbc.encrypt(padded));
 }
 
-function aesDecrypt(ciphertext: Uint8Array, encKey: Uint8Array, iv: Uint8Array): string {
+function aesDecrypt(
+  ciphertext: Uint8Array,
+  encKey: Uint8Array,
+  iv: Uint8Array,
+): string {
   const cbc = new aes.ModeOfOperation.cbc(Array.from(encKey), Array.from(iv));
   const decrypted = cbc.decrypt(Array.from(ciphertext));
   const unpadded = pkcs7Unpad([...decrypted]);
@@ -115,12 +128,21 @@ function buildToken(plaintext: string, key: string): Uint8Array {
   const iv = randomIv();
   const timestamp = writeTimestamp(Math.floor(Date.now() / 1000));
   const ciphertext = aesEncrypt(plaintext, encKey, iv);
-  const signed = concat([new Uint8Array([FERNET_VERSION]), timestamp, iv, ciphertext]);
+  const signed = concat([
+    new Uint8Array([FERNET_VERSION]),
+    timestamp,
+    iv,
+    ciphertext,
+  ]);
   const hmac = hmacSha256(signed, signKey);
   return concat([signed, hmac]);
 }
 
-function verifyAndDecrypt(token: Uint8Array, key: string, maxAgeSec: number | null): string {
+function verifyAndDecrypt(
+  token: Uint8Array,
+  key: string,
+  maxAgeSec: number | null,
+): string {
   if (token.length < 57) {
     throw new Error("token too short");
   }
@@ -158,7 +180,11 @@ export function encryptJson(key: string, plaintext: string): string {
 }
 
 /** Decrypt WebSocket frame; TTL off by default (same as core Fernet.decrypt without ttl). */
-export function decryptJson(key: string, wire: string, maxAgeSec: number | null = null): string {
+export function decryptJson(
+  key: string,
+  wire: string,
+  maxAgeSec: number | null = null,
+): string {
   try {
     const innerAscii = Buffer.from(b64UrlDecode(wire.trim())).toString("ascii");
     const token = b64UrlDecode(innerAscii.trim());

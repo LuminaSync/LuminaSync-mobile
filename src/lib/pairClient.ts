@@ -1,5 +1,9 @@
 import { validatePairingHost } from "./netPolicy";
-import { PROTOCOL_VERSION, DEFAULT_REMOTE_PORT, type PairingPayload } from "../types/protocol";
+import {
+  PROTOCOL_VERSION,
+  DEFAULT_REMOTE_PORT,
+  type PairingPayload,
+} from "../types/protocol";
 
 const PAIR_TIMEOUT_MS = 12_000;
 
@@ -25,7 +29,11 @@ export function validatePinInput(pin: string): string | null {
 }
 
 /** Exchange PIN for Fernet key over plaintext WS (LAN only, one-shot). */
-export function pairWithPin(host: string, port: number, pin: string): Promise<PairingPayload> {
+export function pairWithPin(
+  host: string,
+  port: number,
+  pin: string,
+): Promise<PairingPayload> {
   const hostErr = validatePairingHost(host);
   if (hostErr) return Promise.reject(new Error(hostErr));
   const pinErr = validatePinInput(pin);
@@ -53,15 +61,21 @@ export function pairWithPin(host: string, port: number, pin: string): Promise<Pa
       reject(new Error(msg));
     };
 
-    const timer = setTimeout(() => fail("Connection timed out. Is Pair Mobile open on the PC?"), PAIR_TIMEOUT_MS);
+    const timer = setTimeout(
+      () => fail("Connection timed out. Is Pair Mobile open on the PC?"),
+      PAIR_TIMEOUT_MS,
+    );
 
-    ws.onerror = () => fail("Could not reach the PC. Check IP, Wi‑Fi, and Pair Mobile.");
+    ws.onerror = () =>
+      fail("Could not reach the PC. Check IP, Wi‑Fi, and Pair Mobile.");
     ws.onclose = () => {
       if (!settled) fail("Connection closed before pairing completed.");
     };
 
     ws.onopen = () => {
-      ws.send(JSON.stringify({ v: PROTOCOL_VERSION, cmd: "pair", pin: digits }));
+      ws.send(
+        JSON.stringify({ v: PROTOCOL_VERSION, cmd: "pair", pin: digits }),
+      );
     };
 
     ws.onmessage = (ev) => {

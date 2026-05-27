@@ -6,11 +6,11 @@ Display tuning tools often require Alt+Tab during competitive play. VibranceFlow
 
 ## Why LAN WebSockets (not Bluetooth)
 
-| Approach | Verdict |
-|----------|---------|
+| Approach                             | Verdict                                                                               |
+| ------------------------------------ | ------------------------------------------------------------------------------------- |
 | Bluetooth on Windows (Python server) | Fragile pairing, poor desktop server story, higher latency for frequent slider events |
-| HTTP polling | Too slow for real-time sliders |
-| **WebSocket over Wi‑Fi/LAN** | Persistent channel, low latency, straightforward Python server in core |
+| HTTP polling                         | Too slow for real-time sliders                                                        |
+| **WebSocket over Wi‑Fi/LAN**         | Persistent channel, low latency, straightforward Python server in core                |
 
 Bluetooth may be explored later for discovery only; **v1 uses LAN**.
 
@@ -76,13 +76,13 @@ Full mobile policy: [SECURITY.md](SECURITY.md).
 
 ## Commands (v1, implemented)
 
-| Command | Purpose |
-|---------|---------|
-| `get_state` | Observer, active exe, sliders, saved `programs[]` |
-| `set_sliders` | Update sliders; optional `exe` for a saved profile |
-| `set_observer` | Enable/disable foreground observer |
-| `reset_profile` | Reset active (or given) exe to GPU defaults |
-| `ping` | Health check |
+| Command         | Purpose                                            |
+| --------------- | -------------------------------------------------- |
+| `get_state`     | Observer, active exe, sliders, saved `programs[]`  |
+| `set_sliders`   | Update sliders; optional `exe` for a saved profile |
+| `set_observer`  | Enable/disable foreground observer                 |
+| `reset_profile` | Reset active (or given) exe to GPU defaults        |
+| `ping`          | Health check                                       |
 
 Exact JSON schema: `docs/INTEGRATION.md` (field `v`).
 
@@ -103,9 +103,9 @@ Exact JSON schema: `docs/INTEGRATION.md` (field `v`).
 
 ## Alternatives considered
 
-| Stack | Notes |
-|-------|-------|
-| Flutter + Dart | Excellent UI; team picks one cross-platform stack and sticks to it |
-| Native Kotlin + Swift | Best platform integration; double maintenance |
+| Stack                 | Notes                                                              |
+| --------------------- | ------------------------------------------------------------------ |
+| Flutter + Dart        | Excellent UI; team picks one cross-platform stack and sticks to it |
+| Native Kotlin + Swift | Best platform integration; double maintenance                      |
 
 Default recommendation in README: Expo unless the repository already standardizes on Flutter.

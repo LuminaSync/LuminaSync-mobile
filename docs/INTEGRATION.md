@@ -6,13 +6,25 @@ This document is the contract between **VibranceFlow-mobile** and **VibranceFlow
 
 Same as `ColorProfile` in core `core/models.py` and `profiles.json`:
 
-| Field | Type | Range / notes |
-|-------|------|----------------|
-| `vibrance` | number | 0–100 (percent) |
+| Field        | Type   | Range / notes               |
+| ------------ | ------ | --------------------------- |
+| `vibrance`   | number | 0–100 (percent)             |
 | `brightness` | number | offset % (e.g. `42` = +42%) |
-| `contrast` | number | offset % |
-| `gamma` | number | 0.4–2.8 |
-| `hue` | number | 0–359, optional |
+| `contrast`   | number | offset %                    |
+| `gamma`      | number | 0.4–2.8                     |
+| `hue`        | number | 0–359, optional             |
+
+Per-app audio is tracked separately:
+
+| Field                 | Type    | Range / notes                                                                              |
+| --------------------- | ------- | ------------------------------------------------------------------------------------------ |
+| `audio.volume`        | number  | 0–100 percent                                                                              |
+| `audio.muted`         | boolean | mute override for the app                                                                  |
+| `audio.available`     | boolean | runtime-only, true when the PC sees a live audio session                                   |
+| `audio.session_count` | number  | how many live sessions matched the selected app                                            |
+| `audio.backend`       | string  | backend used by the PC (`windows-wasapi`, `linux-pulseaudio`, etc.)                        |
+| `audio.display_name`  | string  | preferred runtime label for the matched session(s)                                         |
+| `audio.reason`        | string  | runtime reason such as `ok`, `mixed`, `no_session`, `backend_unavailable`, `backend_error` |
 
 ## Example plaintext payload (before encryption)
 
@@ -48,10 +60,22 @@ Server responds (plaintext before encryption):
       "gamma": 1.05,
       "hue": 0
     },
+    "audio": {
+      "available": true,
+      "volume": 65,
+      "muted": false
+    },
     "programs": [
       {
         "exe": "game.exe",
-        "sliders": { "vibrance": 80, "brightness": 10, "contrast": 5, "gamma": 1.05, "hue": 0 }
+        "sliders": {
+          "vibrance": 80,
+          "brightness": 10,
+          "contrast": 5,
+          "gamma": 1.05,
+          "hue": 0
+        },
+        "audio": { "available": true, "volume": 65, "muted": false }
       }
     ]
   }
@@ -60,17 +84,20 @@ Server responds (plaintext before encryption):
 
 `programs` mirrors saved entries in `%APPDATA%\\VibranceFlow\\profiles.json`. Both UIs poll `get_state` (~1.5s) so local edits on PC or phone appear on the other side without reloading the app.
 
+Audio is resolved from live sessions at runtime. Saved profile data stores only the desired `audio.volume` / `audio.muted` override; `available`, `session_count`, `backend`, `display_name`, and `reason` are computed on the PC each time state is requested.
+
 When the PC closes the remote port, the server sends an encrypted frame `{"event":"port_closed","error":"port_closed"}` before disconnecting. The mobile app shows a waiting state and auto-reconnects when the port is opened again (same saved pairing key).
 
 ## Commands (v1)
 
-| Command | Payload | Notes |
-|---------|---------|--------|
-| `ping` | — | Health check |
-| `get_state` | — | Observer, active exe, current sliders, `programs[]` |
-| `set_sliders` | vibrance, brightness, contrast, gamma, hue; optional `exe` | Applies immediately; saves profile when exe is known |
-| `set_observer` | `enabled` (bool) | Toggles engine |
-| `reset_profile` | optional `exe` | Resets profile to GPU defaults at PC startup; uses active exe if omitted |
+| Command         | Payload                                                    | Notes                                                                                     |
+| --------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `ping`          | —                                                          | Health check                                                                              |
+| `get_state`     | —                                                          | Observer, active exe, current sliders/audio, `programs[]`                                 |
+| `set_sliders`   | vibrance, brightness, contrast, gamma, hue; optional `exe` | Applies immediately; saves profile when exe is known                                      |
+| `set_audio`     | `volume`, `muted`; optional `exe`                          | Saves desired app audio and applies immediately to all matched live sessions for that app |
+| `set_observer`  | `enabled` (bool)                                           | Toggles engine                                                                            |
+| `reset_profile` | optional `exe`                                             | Resets profile to GPU defaults at PC startup; uses active exe if omitted                  |
 
 ## Wire format
 
@@ -84,13 +111,19 @@ Mobile implements the same double-encoding as Python in `src/lib/fernetWire.ts`.
 2. Phone: enter IP + code → plaintext WebSocket frame (LAN only):
 
 ```json
-{"v":1,"cmd":"pair","pin":"482917"}
+{ "v": 1, "cmd": "pair", "pin": "482917" }
 ```
 
 3. PC responds once (plaintext):
 
 ```json
-{"v":1,"ok":true,"host":"192.168.1.42","port":8765,"key":"<url-safe-fernet-key>"}
+{
+  "v": 1,
+  "ok": true,
+  "host": "192.168.1.42",
+  "port": 8765,
+  "key": "<url-safe-fernet-key>"
+}
 ```
 
 4. All later frames use Fernet (double base64url) as below.
@@ -100,7 +133,7 @@ Code expires in ~15 minutes; **New code** on PC invalidates the previous one. QR
 ## Pairing payload (QR / advanced)
 
 ```json
-{"v":1,"host":"192.168.1.42","port":8765,"key":"<url-safe-fernet-key>"}
+{ "v": 1, "host": "192.168.1.42", "port": 8765, "key": "<url-safe-fernet-key>" }
 ```
 
 Mobile validates `host` is a private LAN IPv4 address before connecting.
@@ -122,12 +155,12 @@ Mobile may expose observer toggle and "desktop colors" separately from per-game 
 
 ## Repository boundaries
 
-| Concern | Owner repo |
-|---------|------------|
-| NVAPI / GDI | VibranceFlow-core |
-| WebSocket server + QR | VibranceFlow-core |
-| UI sliders + QR scan | VibranceFlow-mobile |
-| Public downloads / SEO | VibranceFlow-web |
+| Concern                | Owner repo          |
+| ---------------------- | ------------------- |
+| NVAPI / GDI            | VibranceFlow-core   |
+| WebSocket server + QR  | VibranceFlow-core   |
+| UI sliders + QR scan   | VibranceFlow-mobile |
+| Public downloads / SEO | VibranceFlow-web    |
 
 ## References
 

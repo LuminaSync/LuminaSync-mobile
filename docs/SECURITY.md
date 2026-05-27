@@ -4,32 +4,32 @@ VibranceFlow Mobile is a **local remote control** for your own PC. It does not u
 
 ## Threat model (v1)
 
-| Threat | Mitigation |
-|--------|------------|
+| Threat                                                           | Mitigation                                                                          |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | Another device on the same Wi‑Fi reads or forges slider commands | Every WebSocket frame is **Fernet-encrypted** with a secret from QR / paste pairing |
-| Stolen phone backup exposes pairing | Fernet `key` stored in **expo-secure-store** only (not AsyncStorage) |
-| Malicious QR points phone at a public IP | App refuses WebSocket hosts outside **private / link-local** IPv4 ranges |
-| Accidental secret leakage via logs | Production code must not log `key` or decrypted payloads |
-| Data sent to VibranceFlow servers | **None** — no internet API calls in the app runtime (LAN only) |
+| Stolen phone backup exposes pairing                              | Fernet `key` stored in **expo-secure-store** only (not AsyncStorage)                |
+| Malicious QR points phone at a public IP                         | App refuses WebSocket hosts outside **private / link-local** IPv4 ranges            |
+| Accidental secret leakage via logs                               | Production code must not log `key` or decrypted payloads                            |
+| Data sent to VibranceFlow servers                                | **None** — no internet API calls in the app runtime (LAN only)                      |
 
 This is **local zero-trust**: the LAN is untrusted; only holders of the pairing key can issue valid commands.
 
 ## Data inventory
 
-| Data | Stored? | Where | Purpose |
-|------|---------|-------|---------|
-| Fernet `key` | Yes | SecureStore | Encrypt commands to PC |
-| LAN `host`, `port` | Yes | SecureStore | Reconnect to paired PC |
-| User account / email | No | — | — |
-| Location, contacts, ads ID | No | — | — |
-| Command history | No | — | In-memory session only |
-| Crash / analytics telemetry | No | — | Not included in v1 |
+| Data                        | Stored? | Where       | Purpose                |
+| --------------------------- | ------- | ----------- | ---------------------- |
+| Fernet `key`                | Yes     | SecureStore | Encrypt commands to PC |
+| LAN `host`, `port`          | Yes     | SecureStore | Reconnect to paired PC |
+| User account / email        | No      | —           | —                      |
+| Location, contacts, ads ID  | No      | —           | —                      |
+| Command history             | No      | —           | In-memory session only |
+| Crash / analytics telemetry | No      | —           | Not included in v1     |
 
 ## Permissions
 
-| Permission | When |
-|------------|------|
-| Camera | Pair screen only (QR scan) |
+| Permission          | When                                    |
+| ------------------- | --------------------------------------- |
+| Camera              | Pair screen only (QR scan)              |
 | Local network (iOS) | Connecting to `ws://192.168.x.x` on LAN |
 
 No microphone, Bluetooth, or location.
