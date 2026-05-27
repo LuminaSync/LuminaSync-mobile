@@ -10,6 +10,9 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      CI: "1"
+      NODE_ENV: production
 
     steps:
       - name: Checkout
@@ -31,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Generate native Android project
-        run: npx expo prebuild --platform android --clean --non-interactive
+        run: npx expo prebuild --platform android --clean
 
       - name: Build release APK
         run: |
