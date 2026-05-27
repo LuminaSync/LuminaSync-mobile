@@ -1,6 +1,7 @@
 # VibranceFlow Mobile
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![Build Android APK](https://github.com/VibranceFlow/VibranceFlow-mobile/actions/workflows/build-android.yml/badge.svg)](https://github.com/VibranceFlow/VibranceFlow-mobile/actions/workflows/build-android.yml)
 
 VibranceFlow Mobile is the Android companion app for controlling VibranceFlow Core on your Windows PC over local Wi-Fi.
 
@@ -40,6 +41,39 @@ After pairing, all controls are available from the phone:
 - Communication is LAN-only and encrypted at the payload layer.
 
 Security details: [docs/SECURITY.md](docs/SECURITY.md)
+
+## 🛡️ Security, False Positives & Transparency
+
+The Android APK is built in a clean CI flow using GitHub Actions with a zero-trust approach and no telemetry SDKs.
+
+Even with a clean build pipeline, Android will show the standard **"install unknown apps"** warning when installing by sideload (outside Google Play). This is expected platform behavior and does not, by itself, indicate malware.
+
+Transparency commitments:
+
+- fully open-source project
+- LAN-only architecture for control traffic
+- encrypted local protocol with no cloud relay requirement
+- zero analytics and zero background tracking
+
+VirusTotal references (maintainer-updated):
+
+- EXE scan: [Link to VirusTotal Scan - EXE/APK]
+- APK scan: [Link to VirusTotal Scan - EXE/APK]
+
+For technical users: always verify release integrity with the artifact hash/checksum before installation.
+
+## ☕ Support the Project
+
+Publishing software through trusted official channels requires recurring cost:
+
+- Windows code-signing certificates (OV/EV): **US$80+/year**
+- Apple Developer Program: **US$99/year**
+- Google Play Store registration: **US$25** one-time
+
+Support link: [Support VibranceFlow on Ko-fi](https://ko-fi.com/YOUR_USERNAME)
+
+If funding goals are reached, the ecosystem can move to signed binaries and official store distribution.  
+Until then, the project remains open-source, free, and transparent in both build and security model.
 
 ## Troubleshooting
 
